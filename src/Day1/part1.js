@@ -67,6 +67,7 @@ function generatePositions(oldPosition, movementVector) {
 }
 
 var currentLocation = new Vector(0, 0);
+
 var normalizedDirection = new Vector(0, 1);
 var previouslyVisitedLocations = [];
 
@@ -86,15 +87,15 @@ fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
         const updatedLocation = currentLocation.add(scaledVector);
         const locationsFromOldToUpdated = generatePositions(currentLocation, scaledVector);
 
-        locationsFromOldToUpdated.forEach((newLocation) => {
+        locationsFromOldToUpdated.forEach((locationInBetween) => {
 
            let visitedBefore = previouslyVisitedLocations.filter(previous => {
-               return previous.equals(newLocation);
+               return previous.equals(locationInBetween);
            });
 
            if (visitedBefore.length > 0) {
                console.log('Visited Before', visitedBefore);
-               console.log('Number of Blocks',  numberBlocksAway(visitedBefore[0]));
+               console.log('Part 2 Answer: [Blocks]',  numberBlocksAway(visitedBefore[0]));
            }
         });
 
@@ -103,10 +104,8 @@ fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
         currentLocation = updatedLocation;
     });
 
-
-
     console.log(currentLocation);
-    console.log('Number of blocks away: ', numberBlocksAway(currentLocation));
+    console.log('Part 1 Answer: [Blocks Away]', numberBlocksAway(currentLocation));
 });
 
 
