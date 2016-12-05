@@ -2,8 +2,8 @@
  * Created by Michael Root on 12/4/2016.
  */
 const fs = require('fs');
-var part1 = true;
-var startingButton = [2, 2];
+var part1 = false;
+var startingButton = [1, 3];
 
 const keyPad =
     [   [-1, -1, -1, -1, -1],
@@ -14,12 +14,13 @@ const keyPad =
     ];
 
 const altKeyPad = [
-    [-1, -1, -1,   1, -1, -1, -1, -1],
-    [-1, -1,  2,   3,  4, -1, -1],
-    [-1,  5,  6,   7,  8,  9, -1],
-    [-1, -1, 'A', 'B', 'C', -1, -1],
-    [-1, -1, -1,  'D', -1,  -1,  -1],
-    [-1, -1, -1,  -1, 1, -1, -1, -1]
+    [-1, -1, -1,  -1, -1,  -1,  -1, -1],
+    [-1, -1, -1,   1, -1,  -1,  -1, -1],
+    [-1, -1,  2,   3,  4,  -1,     -1],
+    [-1,  5,  6,   7,  8,   9,     -1],
+    [-1, -1, 'A', 'B', 'C', -1,    -1],
+    [-1, -1, -1,  'D', -1,  -1,    -1],
+    [-1, -1, -1,  -1,  -1, -1, -1, -1]
 ];
 
 const buttonOperations = {
@@ -53,8 +54,6 @@ function processInstruction(previousButton, instruction) {
     return buttonOperations[instruction](previousButton);
 }
 
-
-
 fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
 
     function processLine(presses, line) {
@@ -68,7 +67,7 @@ fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
     }
 
     var presses = data.split('\n').reduce(processLine, []).map(keyPadLocation => {
-        return keyPad[keyPadLocation[1]][keyPadLocation[0]];
+        return part1 ? keyPad[keyPadLocation[1]][keyPadLocation[0]] : altKeyPad[keyPadLocation[1]][keyPadLocation[0]];
     }).join('');
 
     console.log(presses);
