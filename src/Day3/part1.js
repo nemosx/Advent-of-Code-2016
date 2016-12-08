@@ -1,5 +1,4 @@
-const fs = require('fs');
-var part1 = false;
+var part1 = true;
 
 function isValidTriangle(triangleValues) {
     const maxValue = Math.max(...triangleValues);
@@ -14,9 +13,9 @@ function countValidTriangles(triangles) {
     }, 0);
 }
 
+const fs = require('fs');
 fs.readFile('input.txt', 'utf-8', (err, data) => {
-    var triangleArrays = data.split('\n').map(line => {
-
+    const triangleArrays = data.split('\n').map(line => {
         return line.split(' ').map(val => {
             return Number(val);
         });
@@ -26,7 +25,7 @@ fs.readFile('input.txt', 'utf-8', (err, data) => {
         console.log('Part 1 Answer:', countValidTriangles(triangleArrays));
     } else {
         const totalRows = triangleArrays.length;
-        var altTriangles = [];
+        const altTriangles = [];
 
         for (let i = 0; i < totalRows; i += 3) {
             altTriangles.push([triangleArrays[i][0], triangleArrays[i+1][0], triangleArrays[i+2][0]]);

@@ -25,19 +25,19 @@ let keyPad = part1 ?
 
 const buttonOperations = {
     'U': function (previousButton) {
-        var nextButton = [previousButton[0], previousButton[1] - 1];
+        let nextButton = [previousButton[0], previousButton[1] - 1];
         return inBounds(nextButton) ? nextButton : previousButton.slice();
     },
     'D': function (previousButton) {
-        var nextButton = [previousButton[0], previousButton[1] + 1];
+        let nextButton = [previousButton[0], previousButton[1] + 1];
         return inBounds(nextButton) ? nextButton : previousButton.slice();
     },
     'L': function (previousButton) {
-        var nextButton = [previousButton[0] - 1, previousButton[1]];
+        let nextButton = [previousButton[0] - 1, previousButton[1]];
         return inBounds(nextButton) ? nextButton : previousButton.slice();
     },
     'R': function (previousButton) {
-        var nextButton = [previousButton[0] + 1, previousButton[1]];
+        let nextButton = [previousButton[0] + 1, previousButton[1]];
         return inBounds(nextButton) ? nextButton : previousButton.slice();
     }
 };
@@ -62,7 +62,7 @@ function processLine(presses, line) {
 
 const fs = require('fs');
 fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
-    var presses = data.split('\n').reduce(processLine, []).map(keyPadLocation => {
+    const presses = data.split('\n').reduce(processLine, []).map(keyPadLocation => {
         return keyPad[keyPadLocation[1]][keyPadLocation[0]];
     }).join('');
 
