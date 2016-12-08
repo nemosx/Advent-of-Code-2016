@@ -2,7 +2,6 @@
  * Created by Michael Root on 12/4/2016.
  */
 "use strict";
-
 class Vector {
 
     constructor(x, y) {
@@ -26,8 +25,8 @@ class Vector {
             return this.rotateRight(this);
         }
 
-        const x = v.x * 0 + v.y * 1;
-        const y = v.x * -1 + v.y * 0;
+        const x = v.y * 1;
+        const y = v.x * -1;
         return new Vector(x, y);
     }
 
@@ -35,8 +34,8 @@ class Vector {
         if (!v) {
             return this.rotateLeft(this);
         }
-        const x = v.x * 0 + v.y * -1;
-        const y = v.x * 1 + v.y * 0;
+        const x = v.y * -1;
+        const y = v.x * 1;
         return new Vector(x, y);
     }
 }
@@ -66,31 +65,33 @@ function generatePositions(oldPosition, movementVector) {
     return positions.reverse();
 }
 
-var currentLocation = new Vector(0, 0);
+let currentLocation = new Vector(0, 0);
+let normalizedDirection = new Vector(0, 1);
 
-var normalizedDirection = new Vector(0, 1);
-var previouslyVisitedLocations = [];
+const fs = require('fs');
+const previouslyVisitedLocations = [];
 
-
-var fs = require('fs');
-
-fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
-    if (err) throw err;
+fs.readFile('input.txt', 'utf-8', (err, data) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
 
     const instructions = data.split(', ');
 
-    instructions.forEach(function (instruction) {
+    instructions.forEach((instruction) => {
         normalizedDirection = instruction.substring(0, 1) === 'R' ? normalizedDirection.rotateRight() : normalizedDirection.rotateLeft();
 
         const scalar = Number(instruction.substring(1));
         const scaledVector = normalizedDirection.scale(scalar);
+
         const updatedLocation = currentLocation.add(scaledVector);
         const locationsFromOldToUpdated = generatePositions(currentLocation, scaledVector);
 
-        locationsFromOldToUpdated.forEach((locationInBetween) => {
+        locationsFromOldToUpdated.forEach((intermediateLocations) => {
 
-           let visitedBefore = previouslyVisitedLocations.filter(previous => {
-               return previous.equals(locationInBetween);
+            const visitedBefore = previouslyVisitedLocations.filter(previous => {
+               return previous.equals(intermediateLocations);
            });
 
            if (visitedBefore.length > 0) {
@@ -100,7 +101,6 @@ fs.readFile('input-part-1.txt', 'utf-8', (err, data) => {
         });
 
         previouslyVisitedLocations.push(...locationsFromOldToUpdated);
-
         currentLocation = updatedLocation;
     });
 
