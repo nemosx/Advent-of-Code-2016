@@ -1,5 +1,6 @@
 const fs = require('fs');
 const columns = [];
+const part1 = true;
 
 fs.readFileSync('input.txt', 'utf-8')
     .split('\n')
@@ -15,7 +16,10 @@ fs.readFileSync('input.txt', 'utf-8')
 const answer = columns.map(countMap => {
     return Array.from(countMap.entries())
         .sort((a, b) => {
-            return b[1] - a[1];
+            if (part1) {
+                return b[1] - a[1];
+            }
+            return a[1] - b[1];
         })[0][0];
 }).join('');
 
