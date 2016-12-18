@@ -20,6 +20,20 @@ class DisplayMatrix {
         this.matrix[row][column] = value;
     }
 
+    print() {
+        for (let i = 0; i < this.matrix.length; i++) {
+            for (let j = 0; j < this.matrix[i].length; j++) {
+                if (this.matrix[i][j]) {
+                    process.stdout.write("#");
+                } else {
+                    process.stdout.write(' ');
+                }
+            }
+            process.stdout.write('\n');
+        }
+
+    }
+
     /*
      rect AxB turns on all of the pixels in a rectangle at the top-left of the screen which is A columns and B rows.
      */
@@ -78,8 +92,8 @@ class DisplayMatrix {
                 if (nextRowIndex < numberRows) {
                     let nextValue = {
                         value: {
-                            rowIndex : nextRowIndex,
-                            columnIndex : column,
+                            rowIndex: nextRowIndex,
+                            columnIndex: column,
                             value: matrix[nextRowIndex][column],
                         },
                         done: false
@@ -139,7 +153,7 @@ fs.readFileSync('input.txt', 'utf-8')
 
             display.rect(a, b);
         }
-        else if(command.startsWith('rotate column')) {
+        else if (command.startsWith('rotate column')) {
             const exp = /rotate column x=(\d+) by (\d+)/;
             const matches = exp.exec(command);
 
@@ -148,7 +162,7 @@ fs.readFileSync('input.txt', 'utf-8')
 
             display.rotateColumn(a, b);
         }
-        else if(command.startsWith('rotate row')) {
+        else if (command.startsWith('rotate row')) {
             const exp = /rotate row y=(\d+) by (\d+)/;
             const matches = exp.exec(command);
 
@@ -160,3 +174,5 @@ fs.readFileSync('input.txt', 'utf-8')
     })
 
 console.log(display.activePixels);
+
+display.print();
