@@ -16,6 +16,7 @@ class Vector {
     equals(v) {
         return this.x === v.x && this.y === v.y;
     }
+
     scale(scalar) {
         return new Vector(this.x * scalar, this.y * scalar);
     }
@@ -27,6 +28,7 @@ class Vector {
 
         const x = v.y * 1;
         const y = v.x * -1;
+
         return new Vector(x, y);
     }
 
@@ -36,6 +38,7 @@ class Vector {
         }
         const x = v.y * -1;
         const y = v.x * 1;
+
         return new Vector(x, y);
     }
 }
