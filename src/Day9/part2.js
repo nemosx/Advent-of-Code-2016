@@ -11,33 +11,16 @@ function decompress(input) {
         return input.length;
     }
 
-    let result = 0;
-    let cursor = 0;
+    const numberOfCharactersBeforeMatch =  matches.index;
+    const numberOfCharactersToProcess = parseInt(matches[1], 10);
+    const repeatCount = parseInt(matches[2], 10);
 
-    while (cursor < input.length) {
-        if (matches && cursor === matches.index) {
-            let numberOfCharactersToProcess = parseInt(matches[1], 10);
-            let repeatCount = parseInt(matches[2], 10);
+    const startIndex = numberOfCharactersBeforeMatch + matches[0].length;
+    const endIndex = startIndex + numberOfCharactersToProcess;
 
-            cursor += matches[0].length;
-
-            let nextInput = input.slice(cursor, cursor + numberOfCharactersToProcess);
-            let intermediateResult = decompress(nextInput);
-
-            result += intermediateResult * repeatCount;
-
-            cursor += numberOfCharactersToProcess;
-
-            while (matches && matches.index < cursor) {
-                matches = regex.exec(input);
-            }
-        }
-        else {
-            result++;
-            cursor++;
-        }
-    }
-    return result;
+    return numberOfCharactersBeforeMatch
+        + (decompress(input.slice(startIndex, endIndex)) * repeatCount)
+        + decompress(input.slice(endIndex));
 }
 
 const assert = require('assert');
