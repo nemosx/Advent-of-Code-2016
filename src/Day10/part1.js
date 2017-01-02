@@ -83,6 +83,7 @@ class Bot {
 }
 
 class OutputBucket {
+
     constructor(id) {
         this.id = id;
         this.chips = [];
@@ -133,15 +134,14 @@ function getOutput(outputId) {
     return outputBucket;
 }
 
+const VALUE_REGEX =  /value (\d+) goes to (.*)/;
+const GIVES_REGEX = /(.*) gives low to (.*) and high to (.*)/;
 
 const botMap = new Map();
 const outputMap = new Map();
 
 const fs = require('fs');
 const instructions = fs.readFileSync('input.txt', 'utf-8');
-
-const VALUE_REGEX =  /value (\d+) goes to (.*)/;
-const GIVES_REGEX = /(.*) gives low to (.*) and high to (.*)/;
 
 instructions.split('\n').forEach(instruction => {
     let matches;
@@ -160,5 +160,3 @@ instructions.split('\n').forEach(instruction => {
             .addCommands(lowDestination, highDestination);
     }
 });
-
-
