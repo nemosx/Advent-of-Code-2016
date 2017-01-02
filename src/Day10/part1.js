@@ -8,7 +8,6 @@ class Bot {
 
     addChip(chipId) {
         this.chips.push(chipId);
-
         this.executeIfReady();
     }
 
@@ -26,21 +25,20 @@ class Bot {
         }
     }
 
+    executeCommands() {
+        console.log(
+            'bot ' + this.id + ' with chips ' +
+            this.chips + ' ready to execute commands');
+
+        this.commands.forEach(cmd => {
+            cmd();
+        });
+    }
+
     checkForSolution() {
         if (this.chips.includes(61) && this.chips.includes(17)) {
             console.log('THIS BOT ', this.id);
         }
-    }
-
-    executeCommands() {
-        console.log(
-            'bot ' + this.id + ' with chips ' +
-            this.chips + ' has scheduled commands for execution');
-
-        this.commands.forEach(cmd => {
-            //invoke the command asynchronously
-            setTimeout(cmd, 1);
-        });
     }
 
     addCommands(lowDest, highDest) {
@@ -64,13 +62,12 @@ class Bot {
 
     getLow() {
         let lowest = this.chips[0];
-
         this.chips.forEach(val => {
 
             if (val < lowest) {
                 lowest = val;
             }
-        })
+        });
         return lowest;
     }
 
@@ -80,7 +77,7 @@ class Bot {
             if (val > highest) {
                 highest = val;
             }
-        })
+        });
         return highest;
     }
 }
@@ -96,18 +93,19 @@ class OutputBucket {
     }
 }
 
+var pendingCommandCount = 0;
 function decrementPendingCommands() {
     pendingCommandCount--;
 
     if (pendingCommandCount === 0) {
         console.log("Bot Map: ", botMap);
         console.log("Output Map", outputMap);
+        console.log('Part 2 Solution: ' + outputMap.get(0).chips[0] * outputMap.get(1).chips[0] * outputMap.get(2).chips[0]);
     }
 }
 
 function getDestination(destination) {
     const regex = /(bot|output) (\d+)/g;
-
     const matches = regex.exec(destination);
     const destinationType = matches[1];
     const destinationId = parseInt(matches[2], 10);
@@ -132,8 +130,6 @@ function getOutput(outputId) {
         outputBucket = new OutputBucket(outputId);
         outputMap.set(outputId, outputBucket);
     }
-
-    console.log('outputbucket', outputBucket);
     return outputBucket;
 }
 
@@ -142,31 +138,27 @@ const botMap = new Map();
 const outputMap = new Map();
 
 const fs = require('fs');
-
 const instructions = fs.readFileSync('input.txt', 'utf-8');
 
-var pendingCommandCount = 0;
+const VALUE_REGEX =  /value (\d+) goes to (.*)/;
+const GIVES_REGEX = /(.*) gives low to (.*) and high to (.*)/;
 
 instructions.split('\n').forEach(instruction => {
-    if (instruction.startsWith('value')) {
-        const valueRegex = /value (\d+) goes to (.*)/
-        const matches = valueRegex.exec(instruction);
+    let matches;
+
+    if (matches = VALUE_REGEX.exec(instruction)) {
         const chip = parseInt(matches[1], 10);
-        const destination = matches[2];
+        const bot = matches[2];
 
-        getDestination(destination).addChip(chip);
+        getDestination(bot)
+            .addChip(chip);
     }
-    else {
-        const regex = /(.*) gives low to (.*) and high to (.*)/;
-        const matches = regex.exec(instruction);
-        const source = matches[1];
-        const lowDestination = matches[2];
-        const highDestination = matches[3];
+    else if (matches = GIVES_REGEX.exec(instruction)) {
+        const [, bot, lowDestination, highDestination] = matches;
 
-        getDestination(source)
+        getDestination(bot)
             .addCommands(lowDestination, highDestination);
-
     }
-})
+});
 
 
